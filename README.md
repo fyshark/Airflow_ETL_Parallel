@@ -385,7 +385,7 @@ You will see the Airflow connection setting page as below:
 Make sure the `Connection Id` is identical to the variable `postgres_conn_id` in your code.
 
 3 . Then you'll see the Dag graph below:
-<img src='img/airflow2.png' style = {{}} alt="airflow2"/>
+<img src='img/airflow_dag.png' style = {{}} alt="airflow_dag.png"/>
 
 - start_pipeline → group_A:
 
