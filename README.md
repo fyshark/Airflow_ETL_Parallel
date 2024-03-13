@@ -374,7 +374,17 @@ with DAG('weather_dag_2',
 The weather API availability check must pass `is_weather_api_ready` before the weather data can be fetched `extract_weather_data`. 
 Once the data is successfully fetched, it is then transformed and loaded `transform_load_weather_data`.
 
-2. Then you'll see the Dag graph as below:
+2. Set the host as the RDS endpoint in Airflow's connection settings allows Airflow to correctly and securely target the specific Amazon RDS instance where your database is hosted.
+
+Go to Airflow Admin -> connections -> edit `Connection Id`, `Connection Type`, `Host`, `Login`, `Password`, `Port` as needed. 
+Here, `Host` should be filled in with your RDS instance endpoint, `Login` should be postgres, `Password` is what you set up for RDS master password before, `Port` is 5432.
+
+You will see the Airflow connection setting page as below:
+<img src='img/connection.png' style = {{}} alt="connection.png"/>
+
+Make sure the `Connection Id` is identical to the variable `postgres_conn_id` in your code.
+
+3 . Then you'll see the Dag graph below:
 <img src='img/airflow2.png' style = {{}} alt="airflow2"/>
 
 - start_pipeline → group_A:
@@ -411,12 +421,18 @@ After `join_data` is completed, `load_joined_data` takes over.
 
 The `end_pipeline` is another DummyOperator indicating the end of the DAG process after `load_joined_data` has successfully saved the joined data to S3.
 
-Then, you'll see the graph status updated as below:
-   <img src='img/airflow_dag.png' style = {{}} alt="airflow_dag.png"/>
+4. Make sure you set up the http_conn_id variable inside Airflow's connection configurations as below, which allows you to manage HTTP connections centrally, including endpoints, credentials, and other HTTP-related settings.
+The endpoint part in the code can be found from your Openweather API account.
+<img src='img/connection_api.png' style = {{}} alt="connection_api.png"/>
+
+
+6. Then, you'll see the graph status updated as below:
+<img src='img/airflow_dag.png' style = {{}} alt="airflow_dag.png"/>
 
 
 ## [Usage](#usage)
 
-### That's it 🌟! Now, you can automates the ETL (Extract, Transform, Load) process for weather data. 
-### This workflow showcases Airflow's capability to orchestrate API data fetching, apply transformations in Python, and manage file storage operations. 
-### This makes it a powerful tool for data engineering and automation tasks.
+### That's it 🌟! Now, you can automate the ETL process to parallelly fetch and process Houston's weather data and static city data, merging them for storage in S3!
+### The project showcases a practical application of ETL (Extract, Transform, Load) processes in data engineering, leveraging Airflow for workflow automation, the OpenWeather API for real-time data collection, PostgreSQL for data storage and manipulation, and Amazon S3 for data archiving. 
+### This setup is beneficial for scenarios requiring up-to-date weather data analysis, urban planning, environmental monitoring, and more, providing a solid foundation for data-driven decision-making.
+
